@@ -1,0 +1,22 @@
+class Solution {
+public:
+	vector<int>bfsOfGraph(int V, vector<int> adj[]){
+	    vector<int> vis(V,false),ans;
+	    queue<int> temp;
+	    temp.push(0);
+	    while(!temp.empty()){
+	        int fr=temp.front();
+	        temp.pop();
+	        vis[fr]=true;
+	        ans.push_back(fr);
+	        for(auto &x:adj[fr]){
+	            if(!vis[x]){
+	                temp.push(x);
+	                vis[x]=true;
+	            }
+	        }
+	    }
+	    return ans;
+	}
+	
+};

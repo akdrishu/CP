@@ -1,0 +1,37 @@
+class Solution {
+public:
+// USING RECURSION(EXPECTED IN THE QUESTION
+    vector<int> ans;
+    void dfs(int v, vector<int> adj[],vector<bool> &vis){
+        // cout<<v<<" ";
+        ans.push_back(v);
+        vis[v]=true;
+        for(auto &x: adj[v]){
+            if(!vis[x]){
+                dfs(x,adj,vis);
+            }
+        }
+
+    }
+
+// USING STACK
+// 	vector<int>dfsOfGraph(int V, vector<int> adj[]){
+// 	   vector<int> ans;
+// 	   vector<bool> vis(V, false);
+// 	   stack<int> temp;
+// 	   temp.push(0);
+// 	   while(!temp.empty()){
+// 	       ans.push_back(temp.top());
+// 	       vis[temp.top()]=true;
+// 	       int fl=temp.top();
+// 	       temp.pop();
+// 	       for(auto &x: adj[fl]){
+// 	           if(!vis[x]){
+// 	               temp.push(x);
+// 	           }
+// 	       }
+	       
+// 	   }
+// 	   return ans;
+// 	}
+};

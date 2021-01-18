@@ -1,0 +1,25 @@
+class Solution {
+public:
+    bool dfs(int i, vector<int> adj[], vector<bool> &vis, vector<bool> &st){
+        vis[i]=true,st[i]=true;
+        for(auto &x: adj[i]){
+            if(vis[x]){
+                if(st[x])   return true;   
+            }else{
+                if(dfs(x,adj,vis,st))   return true;
+            }
+        }
+        st[i]=false;
+        return false;
+    }
+	bool isCyclic(int V, vector<int> adj[]) {
+	   	vector<bool> vis(V,false);
+	   	vector<bool> st(V,false);
+	   	for(int i=0;i<V;i++){
+	   	    if(!vis[i])
+	   	        if(dfs(i,adj,vis,st))
+	   	            return true;
+	   	}
+	   	return false;
+	}
+};

@@ -1,0 +1,24 @@
+class Solution {
+public:
+    bool dfs(int i,int n, vector<int> adj[], vector<int> &vis, int par){
+        vis[i]=true;
+        for(auto &x: adj[i]){
+            if(vis[x]){
+                if(par!=x)  return true;
+            }else{
+                if(dfs(x,n,adj,vis,i)==true)    return true;
+            }
+        }
+        return false;
+    }
+	bool isCycle(int V, vector<int>adj[]){
+	   vector<int> vis(V,false);
+	   for(int i=0;i<V;i++){
+	       if(!vis[i]){
+	           if(dfs(i,V,adj,vis,-1))    return true;
+	       }
+	   }
+	   return false;
+	}
+	
+};
