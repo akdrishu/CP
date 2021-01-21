@@ -1,0 +1,141 @@
+//https://codeforces.com/contest/510/problem/C
+#include <bits/stdc++.h>
+
+using namespace std;
+#define debug(...) cout<< " [" << #__VA_ARGS__ ": " << (__VA_ARGS__) << "] " ;
+
+void topo(vector<int> adj[], vector<int> &deg) {
+    queue<int> temp;
+    for (int i = 0; i < 26; ++i) {
+        if (deg[i] == 0) temp.push(i);
+    }
+    int count = 0;
+    vector<char> ans;
+    while (!temp.empty()) {
+        int c = temp.front();
+        temp.pop();
+        ans.push_back(char(c + 'a'));
+        for (auto &x: adj[c]) {
+            if (--deg[x] == 0) {
+                temp.push(x);
+            }
+        }
+        count++;
+    }
+    if (count != 26) {
+        cout << "Impossible";
+    } else for (auto &x: ans) cout << x;
+    cout << "\n";
+}
+
+int main() {
+    int n;
+    cin >> n;
+    vector<string> a(n);
+    vector<int> adj[26];
+    vector<int> deg(26);
+    int mac = 0;
+    for (auto &x: a) {
+        cin >> x;
+        mac = max(mac, int(x.length()));
+    }
+    bool ans = true;
+    for (int i = 0; i < n - 1; i++) {
+        int j = 0;
+        while (j < a[i].length() && j < a[i + 1].length()) {
+            if (a[i][j] != a[i + 1][j]) {
+                adj[a[i][j] - 'a'].push_back(a[i + 1][j] - 'a');
+                deg[int(a[i + 1][j] - 'a')]++;
+                break;
+            }
+            j++;
+        }
+        if (j == a[i + 1].length()) {
+            ans = false;
+            break;
+        }
+    }
+    if (!ans) cout << "Impossible\n";
+    else topo(adj, deg);
+}
+
+
+
+
+
+////////////////////using recurstion stack to find cycle and then kahn's algorithm to find order
+#include <bits/stdc++.h>
+
+using namespace std;
+#define debug(...) cout<< " [" << #__VA_ARGS__ ": " << (__VA_ARGS__) << "] " ;
+
+bool recS(int i,vector<int> adj[],vector<bool> &st,vector<bool> &vis){
+    vis[i]=true;
+    st[i]=true;
+    for(auto &x: adj[i]){
+        if(vis[x]){
+            if(st[x])   return true;
+        }else{
+            if(recS(x,adj,st,vis))  return true;
+        }
+    }
+    st[i]=false;
+    return false;
+}
+
+void topo(vector<int> adj[], vector<int> &deg) {
+    queue<int> temp;
+    for (int i = 0; i < 26; ++i) {
+        if (deg[i] == 0) temp.push(i);
+    }
+    vector<char> ans;
+    while (!temp.empty()) {
+        int c = temp.front();
+        temp.pop();
+        ans.push_back(char(c + 'a'));
+        for (auto &x: adj[c]) {
+            if (--deg[x] == 0) {
+                temp.push(x);
+            }
+        }
+    }
+    for (auto &x: ans) cout << x;
+    cout << "\n";
+}
+
+int main() {
+    int n;
+    cin >> n;
+    vector<string> a(n);
+    vector<int> adj[26];
+    vector<int> deg(26);
+    int mac = 0;
+    for (auto &x: a) {
+        cin >> x;
+        mac = max(mac, int(x.length()));
+    }
+    bool ans = true;
+    for (int i = 0; i < n - 1; i++) {
+        int j = 0;
+        while (j < a[i].length() && j < a[i + 1].length()) {
+            if (a[i][j] != a[i + 1][j]) {
+                adj[a[i][j] - 'a'].push_back(a[i + 1][j] - 'a');
+                deg[int(a[i + 1][j] - 'a')]++;
+                break;
+            }
+            j++;
+        }
+        if (j == a[i + 1].length()) {
+            ans = false;
+            break;
+        }
+    }
+    vector<bool> vis(26,false),st(26,false);
+    for (int i = 0; i < 26; ++i) {
+        if(!vis[i]){
+            if(recS(i,adj,st,vis)) ans=false;
+        }
+    }
+    if (!ans || recS(0,adj,st,vis)) cout << "Impossible\n";
+    else topo(adj, deg);
+}

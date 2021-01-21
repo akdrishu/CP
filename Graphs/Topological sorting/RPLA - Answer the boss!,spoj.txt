@@ -1,0 +1,47 @@
+https://www.spoj.com/problems/RPLA/
+#include <bits/stdc++.h>
+
+using namespace std;
+#define debug(...) cout<< " [" << #__VA_ARGS__ ": " << (__VA_ARGS__) << "] " ;
+void topo(int n,vector<int> adj[], vector<int> &deg) {
+    auto cmp= [&](pair<int,int> &a, pair<int,int> &b){
+        if(a.second==b.second)    return a.first<b.first;
+        return a.second<b.second;
+    };
+    vector<pair<int,int>> ans(n);
+    queue<int> temp;
+    for (int i = 0; i < n; ++i) {
+        ans[i].first=i;
+        ans[i].second=0;
+    }
+    for(int i=0; i<n;i++)   if(deg[i]==0)   temp.push(i);
+    while(!temp.empty()){
+        int ver=temp.front();
+        temp.pop();
+        for(auto &x: adj[ver]){
+            if(--deg[x]==0){
+                temp.push(x);
+                ans[x].second=ans[ver].second+1;
+            }
+        }
+    }
+    sort(ans.begin(),ans.end(),cmp);
+    for(auto &x: ans)   cout<<x.second+1<<" "<<x.first<<"\n";
+}
+int main() {
+    int tt,j=0;
+    cin>>tt;
+    while(tt--) {
+        cout<<"Scenario #"<<++j<<":\n";
+        int n,r;
+        cin >> n>>r;
+        vector<int> adj[n],deg(n,0);
+        for(int i=0;i<r;i++){
+            int u,v;
+            cin>>u>>v;
+            adj[v].push_back(u);
+            deg[u]++;
+        }
+        topo(n,adj,deg);
+    }
+}

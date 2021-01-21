@@ -1,0 +1,42 @@
+//https://www.spoj.com/problems/TOPOSORT/
+
+#include <bits/stdc++.h>
+
+using namespace std;
+#define debug(...) cout<< " [" << #__VA_ARGS__ ": " << (__VA_ARGS__) << "] " ;
+
+void topo(int n, vector<int> adj[], vector<int> &deg) {
+    priority_queue<int,vector<int>, greater<int>> temp;
+    vector<int> ans;
+    int cnt=0;
+    for (int i = 0; i < n; i++) if (deg[i] == 0) temp.push(i);
+    while (!temp.empty()) {
+        int ver = temp.top();
+        ans.push_back(ver);
+        temp.pop();
+        for (auto &x: adj[ver]) {
+            if (--deg[x] == 0) {
+                temp.push(x);
+            }
+        }
+        cnt++;
+    }
+    if(cnt!=n)  cout<<"Sandro fails.";
+    else {
+        for (auto &x: ans) cout << x +1 << " ";
+    }
+    cout<<"\n";
+}
+
+int main() {
+    int n, r;
+    cin >> n >> r;
+    vector<int> adj[n], deg(n, 0);
+    for (int i = 0; i < r; i++) {
+        int u, v;
+        cin >> u >> v;
+        adj[--u].push_back(--v);
+        deg[v]++;
+    }
+    topo(n, adj, deg);
+}
