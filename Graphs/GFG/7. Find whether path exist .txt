@@ -1,0 +1,28 @@
+//https://practice.geeksforgeeks.org/problems/find-whether-path-exist5238/0/?track=DSASP-Graph&batchId=154#
+
+bool dfs(vector<vector<int>> &a, int i, int j, int dx, int dy, vector<vector<bool>> &vis) {
+    if (i == dx && j == dy) return true;
+    if (i < 0 || j < 0 || i == a.size() || j == a.size() || a[i][j] == 0 || vis[i][j]) return false;
+    vis[i][j] = true;
+    if (dfs(a, i, j - 1, dx, dy, vis)) return true; //goes left
+    if (dfs(a, i, j + 1, dx, dy, vis)) return true; // goes right
+    if (dfs(a, i - 1, j, dx, dy, vis)) return true; //goes up
+    if (dfs(a, i + 1, j, dx, dy, vis)) return true; //goes down
+    return false;
+}
+
+bool is_Possible(vector<vector<int>> &grid) {
+    vector<vector<bool>> vis(grid.size(), vector<bool>(grid.size(), false));
+    int ai, aj, dx, dy;
+    for (int i = 0; i < grid.size(); i++) {
+        for (int j = 0; j < grid[i].size(); j++) {
+            if (grid[i][j] == 1) {
+                ai = i, aj = j;
+            }
+            if (grid[i][j] == 2) {
+                dx = i, dy = j;
+            }
+        }
+    }
+    return dfs(grid, ai, aj, dx, dy, vis);
+}
