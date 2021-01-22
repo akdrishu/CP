@@ -1,0 +1,25 @@
+//https://practice.geeksforgeeks.org/problems/level-of-nodes-1587115620/1/?track=DSASP-Graph&batchId=154
+using bfs
+
+int nodeLevel(int n, vector<int> adj[], int X) {
+	    vector<bool> vis(n,false);
+	    vector<int> level(n,0);
+	    queue<int> temp;
+	    temp.push(0);
+	    vis[0]=true;
+	    while(!temp.empty()){
+	        int ver=temp.front();
+	        temp.pop();
+	        if(ver==X){
+	            return level[ver];
+	        }
+	        for(auto &x: adj[ver]){
+	            if(!vis[x]){
+	                vis[x]=true;
+	                temp.push(x);
+	                level[x]=level[ver]+1;
+	            }
+	        }
+	    }
+	    return -1;
+	}
