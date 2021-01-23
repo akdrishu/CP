@@ -1,0 +1,23 @@
+//https://practice.geeksforgeeks.org/problems/steps-by-knight5927/0/?track=DSASP-Graph&batchId=154#
+
+int minStepToReachTarget(vector<int>&K, vector<int>&T, int n){
+	    K[0]--,K[1]--,T[0]--,T[1]--;
+	    vector<pair<int, int>> dir{{-2,-1},{-2,1},{-1,-2},{-1,2},{2,-1},{2,1},{1,-2},{1,2}};
+	    vector<vector<int>> dp(n,vector<int>(n,INT_MAX));
+	    queue<pair<int,int>> temp;
+	    temp.push({K[0],K[1]});
+	    dp[K[0]][K[1]]=0;
+	    while(!temp.empty()){
+	        pair<int, int> ver= temp.front();
+	        temp.pop();
+	        for(auto &x: dir){
+	            int a= x.first+ver.first;
+	            int b= x.second+ver.second;
+	            if(a>=0 and a<n and b>=0 and b<n and dp[a][b]>dp[ver.first][ver.second]+1){
+	                dp[a][b]=dp[ver.first][ver.second]+1;
+	                temp.push({a,b});
+	            }
+	        }
+	    }
+	    return dp[T[0]][T[1]];
+	}
