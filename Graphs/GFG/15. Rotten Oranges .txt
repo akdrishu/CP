@@ -1,0 +1,37 @@
+//https://practice.geeksforgeeks.org/problems/rotten-oranges2536/0/?track=DSASP-Graph&batchId=154#
+
+int orangesRotting(vector<vector<int>>& grid) {
+    int n=grid.size(),m=grid[0].size();
+    queue<pair<int,int>> temp;
+    vector<vector<int>> dp(n,vector<int>(m,INT_MAX));
+    for(int i=0;i<n;i++){
+        for(int j=0;j<m;j++){
+            if(grid[i][j]==2){
+                dp[i][j]=0;
+                temp.push({i,j});
+            }
+        }
+    }
+    vector<pair<int,int>> dir{{-1,0},{1,0},{0,1},{0,-1}};
+    while(!temp.empty()){
+        pair<int,int> ver=temp.front();
+        temp.pop();
+        for(auto &x: dir){
+            int a= ver.first+x.first;
+            int b= ver.second+x.second;
+            if(a>=0 && a<n && b>=0 && b<m && grid[a][b]==1 && dp[a][b] > dp[ver.first][ver.second]+1){
+                dp[a][b] = dp[ver.first][ver.second]+1;
+                temp.push({a,b});
+            }
+        }
+    }
+    int count=-1;
+    for(int i=0;i<n;i++){
+        for(int j=0;j<m;j++){
+            if(grid[i][j]!=0){
+                count=max(count,dp[i][j]);
+            }
+        }
+    }
+    return (count==INT_MAX?-1:count);
+}

@@ -1,0 +1,24 @@
+//https://practice.geeksforgeeks.org/problems/x-total-shapes3617/0/?track=DSASP-Graph&batchId=154#
+
+void dfs(int i, int j, vector<vector<bool>> &vis, vector<vector<char>> &a){
+        if(i<0 || j<0 || i>=a.size() || j>= a[0].size() || vis[i][j] || a[i][j]!='X')   return;
+        vis[i][j]=true;
+        dfs(i,j-1,vis,a);
+        dfs(i,j+1,vis,a);
+        dfs(i-1,j,vis,a);
+        dfs(i+1,j,vis,a);
+    }
+
+    int xShape(vector<vector<char>> &grid) {
+        vector<vector<bool>> vis(grid.size(), vector<bool>(grid[0].size(), false));
+        int count = 0;
+        for (int i = 0; i < grid.size(); i++) {
+            for (int j = 0; j < grid[0].size(); j++) {
+                if (grid[i][j]=='X' and !vis[i][j]) {
+                    dfs(i, j, vis, grid);
+                    count++;
+                }
+            }
+        }
+        return count;
+    }

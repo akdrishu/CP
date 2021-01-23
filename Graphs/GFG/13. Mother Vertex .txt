@@ -1,0 +1,42 @@
+//https://practice.geeksforgeeks.org/problems/mother-vertex/0/?track=DSASP-Graph&batchId=154#
+
+int findMotherVertex(int V, vector<int>adj[]){
+        vector<bool> vis(V, false);
+        int ans=-1;
+        for(int i=0;i<V;i++){
+            if(!vis[i]){
+                stack<int> temp;
+                temp.push(i);
+                vis[i]=true;
+                while(!temp.empty()){
+                    int ver= temp.top();
+                    temp.pop();
+                    for(auto &x: adj[ver]){
+                        if(!vis[x]){
+                            temp.push(x);
+                            vis[x]=true;
+                        }
+                    }
+                }
+                ans=i;
+            }
+        }
+        stack<int> temp;
+        vis.assign(V,false);
+        temp.push(ans);
+        vis[ans]=true;
+        int count=0;
+        while(!temp.empty()){
+                    int ver= temp.top();
+                    temp.pop();
+                    count++;
+                    for(auto &x: adj[ver]){
+                        if(!vis[x]){
+                            temp.push(x);
+                            vis[x]=true;
+                        }
+                    }
+                }
+            
+        return (count!=V?-1:ans);
+	}
