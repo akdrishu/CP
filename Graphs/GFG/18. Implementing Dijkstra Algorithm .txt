@@ -1,0 +1,19 @@
+//https://practice.geeksforgeeks.org/problems/implementing-dijkstra-set-1-adjacency-matrix/0/?track=DSASP-Graph&batchId=154#
+
+vector <int> dijkstra(int V, vector<vector<int>> adj[], int S) {
+        vector<int> dis(V,1e5);
+        dis[S]=0;
+        queue<int> temp;
+        temp.push(S);
+        while(!temp.empty()){
+            int ver= temp.front();
+            temp.pop();
+            for(auto &x: adj[ver]){
+                if(dis[ x[0] ] > dis[ver]+ x[1]){
+                    dis[x[0]] = dis[ver]+ x[1];
+                    temp.push(x[0]);
+                }
+            }
+        }
+        return dis;
+    }

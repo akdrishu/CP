@@ -1,0 +1,22 @@
+https://practice.geeksforgeeks.org/problems/topological-sort/0/?track=DSASP-Graph&batchId=154
+
+vector<int> topoSort(int V, vector<int> adj[]) {
+	    vector<int> ans;
+	    queue<int> temp;
+	    vector<int> indeg(V,0);
+	    for(int i=0;i<V;i++){
+	        for(auto &x: adj[i])    indeg[x]++;
+	    }
+	    for(int i=0;i<V;i++)    if(indeg[i]==0) temp.push(i);
+	    while(!temp.empty()){
+	        int ver= temp.front();;
+	        ans.push_back(ver);
+	        temp.pop();
+	        for(auto &x: adj[ver]){
+	            if(--indeg[x]==0){
+	                temp.push(x);
+	            }
+	        }
+	    }
+	    return ans;
+	}
