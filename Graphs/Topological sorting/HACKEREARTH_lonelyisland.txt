@@ -1,0 +1,63 @@
+//https://www.hackerearth.com/practice/algorithms/graphs/topological-sort/practice-problems/algorithm/lonelyisland-49054110/description/
+
+#include "bits/stdc++.h"
+
+using namespace std;
+#define debug(...) cout<< " [" << #__VA_ARGS__ ": " << (__VA_ARGS__) << "] " ;
+typedef long long int ll;
+const ll mod = 1e9 + 7;
+
+void solve() {
+    int n, m, r;
+    cin >> n >> m >> r;
+    r--;
+    vector<double> count(n, 0.0), outdeg(n, 0.0), adj[n], indeg(n, 0.0);
+    vector<bool> vis(n, false);
+    for (int i = 0; i < m; ++i) {
+        int u, v;
+        cin >> u >> v;
+        --u, --v;
+        adj[u].push_back(v);
+        outdeg[u] += 1.0;
+        indeg[v] += 1.0;
+    }
+    count[r] = 1.0;
+    vector<int> order;
+    queue<double> temp;
+    for (int i = 0; i < n; i++) {
+        if (indeg[i] == 0.0) temp.push(i);
+    }
+    while (!temp.empty()) {
+        double ver = temp.front();
+        order.push_back(ll(ver));
+        temp.pop();
+        for (auto &x: adj[ll(ver)]) {
+            count[x] += count[ver] / outdeg[ver];
+            if (--indeg[x] == 0.0) temp.push(x);
+        }
+    }
+    double mac = 0;
+    for (auto &x: order) {
+        if (outdeg[x] == 0) mac = max(mac, count[x]);
+    }
+    double diff = 1e-9;
+    vector<int> ans;
+    for (int i = 0; i < order.size(); ++i) {
+
+        if (outdeg[i] == 0) if (mac - count[i] <= diff) ans.push_back(i);
+
+    }
+    sort(ans.begin(), ans.end());
+    for (auto x: ans) cout << x + 1 << " ";
+}
+
+int main() {
+    ios_base::sync_with_stdio(false);
+    cin.tie(NULL);
+    cout.tie(NULL);
+    ll tt = 1;
+//    cin >> tt;
+    while (tt--) {
+        solve();
+    }
+}
