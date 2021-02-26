@@ -1,0 +1,12 @@
+// https://leetcode.com/problems/unique-paths
+// author: ayush dwivedi
+class Solution {
+public:
+    long long arr[101][101];
+    
+    long long uniquePaths(int m, int n) {
+        if(m==1 || n==1)    return arr[m][n]=1;
+        if(arr[m][n]==0)    return (arr[m][n]=uniquePaths(m-1,n)+uniquePaths(m,n-1));
+        else return arr[m][n];
+    }
+};

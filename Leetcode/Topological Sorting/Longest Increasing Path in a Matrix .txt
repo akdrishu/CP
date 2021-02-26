@@ -1,0 +1,41 @@
+//https://leetcode.com/problems/longest-increasing-path-in-a-matrix/
+// author: ayush dwivedi
+class Solution {
+public:
+    int form(int x, int y, int n, int m){
+        return x*m+y;
+    }
+    bool valid(int x, int y, int n, int m){
+        return (x>=0 && x<n && y>=0 && y<m);
+    }
+    int longestIncreasingPath(vector<vector<int>>& a) {
+        int n=a.size(),m=a[0].size();
+        vector<int> adj[m*n], indeg(m*n,0);        
+        for(int i=0;i<n;i++){
+            for(int j=0;j<m;j++){
+                if(valid(i,j-1,n,m))    if(a[i][j] < a[i][j-1])             {adj[form(i,j,n,m)].push_back(form(i,j-1,n,m)); indeg[form(i,j-1,n,m)]++;}
+                if(valid(i,j+1,n,m))    if(a[i][j] < a[i][j+1])             {adj[form(i,j,n,m)].push_back(form(i,j+1,n,m)); indeg[form(i,j+1,n,m)]++;}
+                if(valid(i-1,j,n,m))    if(a[i][j] < a[i-1][j])             {adj[form(i,j,n,m)].push_back(form(i-1,j,n,m)); indeg[form(i-1,j,n,m)]++;}
+                if(valid(i+1,j,n,m))    if(a[i][j] < a[i+1][j])             {adj[form(i,j,n,m)].push_back(form(i+1,j,n,m));indeg[form(i+1,j,n,m)]++;}
+            }
+        }
+        queue<pair<int,int>> temp;
+        for(int i=0;i<n*m;i++){
+            if(indeg[i]==0) temp.push({i,1});
+        }
+        int ans=1;
+        while(!temp.empty()){
+            int ver= temp.front().first;
+            int dis=temp.front().second;
+            temp.pop();
+            ans=max(ans,dis);
+            for(auto x: adj[ver]){
+                if(--indeg[x]==0){
+                    temp.push({x,dis+1});
+                }
+            }
+        }
+        return ans;
+        
+    }
+};

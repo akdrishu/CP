@@ -1,0 +1,32 @@
+// https://leetcode.com/problems/course-schedule-ii
+// author: ayush dwivedi
+class Solution {
+public:
+    vector<int> findOrder(int n, vector<vector<int>>&a) {
+       vector<int> ans;
+        vector<int> adj[n];
+        vector<int> indeg(n,0);
+        for(int i=0;i<a.size();i++){
+            adj[a[i][1]].push_back(a[i][0]);
+            indeg[a[i][0]]++;
+        }
+        queue<int> temp;
+        for(int i=0;i<n;i++){
+            if(indeg[i]==0) temp.push(i);
+        }
+        int count=0;
+        while(!temp.empty()){
+            int ver= temp.front();
+            count++;
+            ans.push_back(ver);
+            temp.pop();
+            for(int x:adj[ver]){
+                if(--indeg[x]==0){
+                    temp.push(x);
+                }
+            }
+        }
+        if(count==n)    return ans;
+        return {};
+    }
+};

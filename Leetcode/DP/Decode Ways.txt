@@ -1,0 +1,22 @@
+// https://leetcode.com/problems/decode-ways/
+// author: ayush dwivedi
+class Solution {
+public:
+    int numDecodings(string s) {
+        long long int n=s.length();
+        vector<long long int> dp(n,0);
+        if(n==1)    
+            return (s[0]=='0'?0:1);
+        dp[n-1]=(s[n-1]=='0'?0:1);
+        dp[n-2]=(s[n-2]=='0'?0: ( 10*(s[n-2]-'0') +(s[n-1]-'0') >=10 && 10*(s[n-2]-'0') +(s[n-1]-'0') <=26 ? 1+dp[n-1]:dp[n-1]));
+        for(int i=n-3;i>=0;i--){
+            if(s[i]=='0'){
+              dp[i]=0;
+              continue;
+            }
+            int x= 10*(s[i]-'0')+(s[i+1]-'0');
+            dp[i]=(x>=10 && x<=26? dp[i+2]+dp[i+1]:dp[i+1]);
+        }
+        return dp[0];
+    }
+};

@@ -1,0 +1,29 @@
+//https://leetcode.com/problems/course-schedule/
+// author: ayush dwivedi
+class Solution {
+public:
+    bool canFinish(int n, vector<vector<int>>& a) {
+        vector<int> adj[n];
+        vector<int> indeg(n,0);
+        for(int i=0;i<a.size();i++){
+            adj[a[i][0]].push_back(a[i][1]);
+            indeg[a[i][1]]++;
+        }
+        queue<int> temp;
+        for(int i=0;i<n;i++){
+            if(indeg[i]==0) temp.push(i);
+        }
+        int count=0;
+        while(!temp.empty()){
+            int ver= temp.front();
+            count++;
+            temp.pop();
+            for(int x:adj[ver]){
+                if(--indeg[x]==0){
+                    temp.push(x);
+                }
+            }
+        }
+        return count==n;
+    }
+};
