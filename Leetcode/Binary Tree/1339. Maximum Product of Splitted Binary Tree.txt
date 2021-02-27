@@ -1,0 +1,29 @@
+// https://leetcode.com/problems/maximum-product-of-splitted-binary-tree/
+// author 
+class Solution {
+public:
+    long long max(long long a, long long b){
+        return (a>=b?a:b);
+    }
+    long long mod=1e9+7;
+    long long ans;
+    long long change(TreeNode *root){
+        if(root==NULL)  return 0;
+        return root->val + change(root->left)+change(root->right);
+    }
+    long long happ(TreeNode *root, long long off){
+        if(root){
+            long long x= root->val+happ(root->left,off)+happ(root->right,off);
+            ans=max(ans,x*(off-x));
+            return x;
+        }
+        return 0;
+    }
+    int maxProduct(TreeNode* root) {
+        long long off=0;
+        off=change(root);
+        cout<<off;
+        happ(root,off);
+        return ans%mod;
+    }
+};

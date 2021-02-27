@@ -1,0 +1,20 @@
+// https://leetcode.com/problems/binary-tree-pruning/
+// author: ayush dwivedi
+class Solution {
+public:
+   bool change(TreeNode **root){
+        if((*root)== NULL) return true;
+        bool aa= change(&(*root)->left);
+        bool ab= change(&(*root)->right);
+        bool ac= ((*root)->val)==0;
+        if(aa && ab && ac){
+            (*root)=NULL;
+            return true;
+        }
+        return false;
+    }
+    TreeNode* pruneTree(TreeNode* root) {
+        change(&root);
+        return root;
+    }
+};

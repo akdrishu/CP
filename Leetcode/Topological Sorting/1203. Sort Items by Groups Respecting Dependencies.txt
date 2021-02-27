@@ -1,0 +1,123 @@
+// https://leetcode.com/problems/sort-items-by-groups-respecting-dependencies/
+// author: ayush dwivedi
+class Solution {
+public:
+    vector<int> sortItems(int n, int m, vector<int> &group, vector<vector<int>> &a) {
+        ios_base::sync_with_stdio(false);
+        cin.tie(NULL);
+        cout.tie(NULL);
+        vector<int> loc_adj[n], ans;
+        int loc_indeg[n], loc_outdeg[n];
+        for(int i=0;i<n;i++){
+            loc_indeg[i]=0;
+            loc_outdeg[i]=0;
+        }
+        for (int i = 0; i < n; i++) {
+            for (auto x:a[i]) {
+                loc_adj[x].push_back(i);
+                loc_indeg[i]++;
+                loc_outdeg[x]++;
+            }
+        }
+        int sz = m;
+        unordered_map<int,vector<int>> total;
+        for (int i = 0; i < n; i++) {
+            if (group[i] == -1){
+                if (loc_indeg[i] == 0 && loc_outdeg[i] == 0) ans.push_back(i);
+                else {
+                    group[i] = sz;
+                    total[sz].push_back(i);
+                    sz++;
+                }
+            }
+            else{
+                total[group[i]].push_back(i);
+            }
+        }
+        vector<int> adj[sz];
+        int indeg[sz];
+        for(int i=0;i<sz;i++){
+            indeg[i]=0;
+        }
+        unordered_map<int, unordered_map<int, bool>> store;
+        for (int i = 0; i < n; i++) {
+            for (auto x: a[i]) {
+                if (group[x] != group[i] && !store[group[x]][group[i]]) {
+                    adj[group[x]].push_back(group[i]);
+                    indeg[group[i]]++;
+                    store[group[x]][group[i]]=true;
+                }
+            }
+        }
+        //for groups
+        int group_ordering[sz], index = 0;
+        queue<int> temp_group;
+        for (int i = 0; i < sz; i++) {
+            if (indeg[i] == 0) temp_group.push(i);
+        }
+        int count_group = 0;
+        while (!temp_group.empty()) {
+            int ver = temp_group.front();
+            temp_group.pop();
+            group_ordering[index++] = ver;
+            count_group++;
+            for (auto x: adj[ver]) {
+                if (--indeg[x] == 0) {
+                    temp_group.push(x);
+                }
+            }
+        }
+        // for nodes
+        queue<int> temp_node;
+        index = 0;
+        int count_node = 0;
+        for (int i = 0; i < n; i++) {
+            if (loc_indeg[i] == 0) temp_node.push(i);
+        }
+        while (!temp_node.empty()) {
+            int ver = temp_node.front();
+            temp_node.pop();
+            count_node++;
+            for (auto x: loc_adj[ver]) {
+                if (--loc_indeg[x] == 0) {
+                    temp_node.push(x);
+                }
+            }
+        }
+        if (count_group == sz && count_node == n) {
+            for (int i=0;i<sz;i++) {
+                unordered_map<int,int> local_indeg;
+               unordered_map<int,vector<int>> adjff;
+                queue<int> here_top;
+                for(auto &x: total[group_ordering[i]]){
+                    local_indeg[x]=0;
+                }
+               for(auto &x:total[group_ordering[i]]){
+                   
+                   
+                   for(auto &y: a[x]){
+                       if(group[y]==group[x]){
+                           adjff[y].push_back(x);
+                           local_indeg[x]++;
+                       }
+                   }
+               }
+               for(auto &x: local_indeg){
+                   if(x.second==0)  here_top.push(x.first);
+               }
+               while(!here_top.empty()){
+                   int ver= here_top.front();
+                   here_top.pop();
+                   ans.push_back(ver);
+                   for(auto x: adjff[ver]){
+                       if(--local_indeg[x]==0){
+                           here_top.push(x);
+                       }
+                   }
+               }            
+            }
+        }
+        if (ans.size() == n) return ans;
+        else return {};
+    }
+};
